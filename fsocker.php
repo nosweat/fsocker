@@ -4,10 +4,7 @@
  * @author nosweat
  * @param Array $settings : 'timeout' - seconds for HTTP Max timeout for the request, default is 30
  * @param Array $settings : 'port' - HTTP Port e.g 80 or 443 , default is 80
- * @param Array $settings : 'method' - HTTP Method e.g PUT/GET/POST/HEAD/DELETE, default is POST
- * @param Array $settings : 'headers' - HTTP Headers
- * @param Array $settings : 'content_type' - HTTP Content-Type
- * @version 1.0
+ * @version 1.0.1
  */
 class fsocker{
 	
@@ -52,6 +49,8 @@ class fsocker{
 		if(!empty($params)){
 	    	$this->CONTENT_STRING = implode('&', $params);
 		}
+		
+		return $this;
 	}
 	
 	/*
@@ -69,7 +68,9 @@ class fsocker{
 				 	throw new Exception("Could not connect to host (".$url.")");	
 				 }
 				 
-				 $tpl = $this->SETTINGS['method']." ".$segment['path']." ".$this->SETTINGS['http_version'].self::EOL;
+				 $tpl = $this->SETTINGS['method']." ".$segment['path'].
+				 		((isset($segment['query'])) ? "?" . $segment['query'] : '')
+				 	    ." ".$this->SETTINGS['http_version'].self::EOL;
 				 $tpl .= "Host: ".$segment['host'].self::EOL;
 				 $tpl .= "Content-Type: ".$this->SETTINGS['content_type'].self::EOL;
 				 $tpl .= "Content-Length: ".strlen($this->CONTENT_STRING).self::EOL;
